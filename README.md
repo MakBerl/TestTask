@@ -1,5 +1,7 @@
 
-## Настройка и запуск BackEnd'а (на Linux'e)
+## Настройка и запуск BackEnd'а (на дистрибутивах Linux'a, основанных на Debian)
+
+
 **Требуемое ПО для запуска:**
 - NodeJS:
   ```
@@ -9,26 +11,20 @@
   ```
   sudo apt-get install npm
   ```
-- PostgreSQL:
+- PostgreSQL(Инструкция написана именно для этого скрипта):
   1. Скачать архив с сайта [PostgreSQL](https://www.postgresql.org/ftp/source/v12.1/) и разархивировать его
   2. Перейти в папку c разархивированным архивом ``` cd /home/username/folder```
-  3. Выполнить следующие команды для установки PostgreSQL и создания пользователя postgress:
+  3. Выполнить следующие команды для установки PostgreSQL и создания пользователя postgres ([Взято с этого сайта](https://postgrespro.ru/docs/postgresql/12/installation)):
   ```
   ./configure
   make
-  su
-  make install
+  sudo make install
   adduser postgres
   mkdir /usr/local/pgsql/data
   chown postgres /usr/local/pgsql/data
-  su - postgres
-  /usr/local/pgsql/bin/initdb -D /usr/local/pgsql/data
-  /usr/local/pgsql/bin/postgres -D /usr/local/pgsql/data >logfile 2>&1 &
-  /usr/local/pgsql/bin/createdb test
-  /usr/local/pgsql/bin/psql test
   ```
-  4. Войти в пользователя "postgress":
-  ``` sudo -i -u postgres ```, где postgress - имя пользователя
+  4. Войти в пользователя "postgres":
+  ``` sudo -i -u postgres ```, где postgres - имя пользователя
   5. Создать базу данных:
   ```createdb testdb```, где testdb - имя БД
   6. Подключиться к БД:
