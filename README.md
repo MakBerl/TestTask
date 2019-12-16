@@ -47,7 +47,7 @@
      amount         money          
      );
      ```
-  где ```testtable``` - имя таблицы, ```username``` и ```amount``` - ёё поля
+  где ```testtable``` - имя таблицы, ```username``` и ```amount``` - её поля
   
 ### Требуемы модули NodeJS для запуска
 - **Express**:
