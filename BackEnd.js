@@ -1,6 +1,7 @@
 const { Client } = require('pg')
 const express=require('express')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 //Конфигурируем БД
 client = new Client({
     host: '127.0.0.1',
@@ -11,7 +12,7 @@ client = new Client({
 });
 
 const app=express()
-const port=3000//http порт 
+const port=3002//http порт 
 client.connect();
 
 
@@ -25,16 +26,24 @@ const DeleteUser='DELETE FROM ' + TableName + ' WHERE username=$1'
 const PlusMoney='UPDATE '+TableName+' SET amount=amount + $2::money WHERE username=$1 RETURNING *'
 const MinusMoney='UPDATE '+TableName+' SET amount=amount - $2::money WHERE username=$1 RETURNING *'
 
-
+app.use(cors())
 //получаем данные всех пользователей
 app.get('/users', (req,res)=>
 {
-    client.query(ShowTable).then(result=>{res.send(result.rows)})
+//Строки чтоб работал React с BackEnd'ом
+
+//
+    client.query(ShowTable).then(result=>{
+        /* res.set('Access-Control-Allow-Origin','*')
+        res.set('Access-Control-Allow-Methods','GET','OPTIONS')
+        res.set('Access-Control-Allow-Headers','Content-Type') */
+        res.send(result.rows)})
 })
 
 //Получаем данные о пользователе
 app.use(bodyParser.json())
 app.post('/users/', (req,res)=>{
+
     //Должно быть
     let username=req.body.username;
     console.log(username)
@@ -52,6 +61,8 @@ app.post('/users/', (req,res)=>{
 //Обновляем данные пользователя
 app.use(bodyParser.json())
 app.put('/users',(req,res)=>{
+
+
 let username=req.body.username
 let UpdateUser;
 if (req.body.amount>0){
@@ -73,6 +84,7 @@ else{
 //Создаем нового пользователя
 app.use(bodyParser.json())
 app.put('/users/add',(req,res)=>{
+
     let username=req.body.username;
     let amount=req.body.amount;
     client.query(UserCheck, [username], (err,resOfChecking)=>{
@@ -98,6 +110,8 @@ app.put('/users/add',(req,res)=>{
 //Удаляем пользователя
 app.use(bodyParser.json())
 app.delete('/users',(req,res)=>{
+
+
     let username=req.body.username
     client.query(DeleteUser,[username],(err,result)=>{
         res.send('Deleted')
